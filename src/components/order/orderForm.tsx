@@ -4,6 +4,7 @@ import { z } from "zod";
 import supabase from "../../utils/superbase";
 import { useShoppingCartContext } from "../../context/useShoppingCartContext";
 import convertToBanglaNumber from "../../utils/convertToBanglaNumber";
+import { useNavigate } from "react-router-dom";
 
 const OrderSchema = z.object({
   name: z
@@ -43,6 +44,8 @@ const OrderForm = () => {
     resolver: zodResolver(OrderSchema),
   });
 
+  const navigate = useNavigate();
+
   // Update the values whenever the state changes in useShoppingCartContext
   setValue("productQuantity", productQuantity);
   setValue("shippingCost", shippingCost);
@@ -65,7 +68,7 @@ const OrderForm = () => {
     if (error) {
       console.error("Error inserting data:", error);
     } else {
-      console.log("Data inserted successfully!");
+      navigate("/checkout/order-confirmation", { replace: true });
     }
   };
 
